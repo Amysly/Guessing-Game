@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Guessing Game</title>
+    <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+    <center>
+        <form class="container">
+            <h3>ENTER YOUR GUESS</h3>
+            <input type="text" id="message" placeholder="enter a number" class="info">
+            <button class="submit" type="button" onclick='submitButton()'>SUBMIT GUESS</button>
+            <button class="reset" onclick="
+                totalGuess.high = 0;
+                totalGuess.low = 0;
+                localStorage.removeItem('totalGuess');
+                
+        
+            ">RESET GAME</button>
+        </form>
+    
+    </center>
+   
+    <script>
+        const message = document.getElementById('message');
+        let totalGuess = JSON.parse(localStorage.getItem('totalGuess')) || {
+           high: 0,
+            low: 0 
+        }
+      
+        function submitButton() {
+            const info = message.value;
+            let guess = parseInt(info);
+            let result = '';
+
+            let randomNumber = Math.floor(Math.random() * 100) + 1;
+
+            if (isNaN(guess)) {
+                result = 'Please enter a valid number.';
+            } else {
+                if (guess < randomNumber) {
+                    result = 'Your guess is low.';
+                } else if (guess > randomNumber) {
+                    result ='Your guess is high.';
+                } else if (guess === randomNumber) {
+                    result = 'Congratulations, your guess is correct!';
+                }
+
+                message.value = '';
+            }
+
+            if (result === 'Your guess is high.') {
+                totalGuess.high += 1;
+            } else if (result === 'Your guess is low.') {
+                totalGuess.low += 1;
+            }
+
+            localStorage.setItem('totalGuess', JSON.stringify(totalGuess));
+
+            alert(`${result} Total high guess: ${totalGuess.high}, Total low guess: ${totalGuess.low}`);
+        }
+    </script>
+</body>
+</html>
